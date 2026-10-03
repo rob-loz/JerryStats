@@ -1,0 +1,5 @@
+credentials.json
+project-2482145a-5f88-4894-9ec-38f62ab7f7fa.json
+*-service-account*.json
+__pycache__/
+*.py[cod]
