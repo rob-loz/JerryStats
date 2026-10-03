@@ -282,11 +282,25 @@
 
 		[hidden] { display: none !important; }
 
+		html, body, main, .dashboard-frame, .dashboard-area {
+			width: 100%;
+			min-width: 0;
+			min-height: 100%;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			background: #fff;
+			box-shadow: none;
+		}
+
+		html, body { height: 100%; overflow: hidden; }
+		iframe { width: 100%; height: 100vh; min-height: 100vh; }
+
 		@media (max-width: 620px) {
 			.masthead { min-height: 66px; padding: 0 18px; }
 			.brand { font-size: 11px; letter-spacing: 0.8px; }
 			.season-tag { font-size: 9px; letter-spacing: 0.6px; }
-			main { width: calc(100% - 28px); padding-top: 34px; }
+			main { width: 100%; padding: 0; }
 			.intro { align-items: start; flex-direction: column; gap: 13px; margin-bottom: 20px; }
 			.intro-note { max-width: 360px; }
 			.frame-bar { padding: 9px 10px; }
@@ -294,7 +308,7 @@
 			.text-button { width: 36px; padding: 0; font-size: 0; }
 			.text-button::before { font-size: 16px; content: "×"; }
 			.dashboard-area, iframe, .empty-state { min-height: 68vh; }
-			iframe { height: 78vh; }
+			iframe { height: 100vh; min-height: 100vh; }
 			.setup-form { flex-direction: column; }
 			.setup-form button { width: 100%; }
 			.footer-line { font-size: 9px; letter-spacing: 0.4px; }
@@ -302,88 +316,12 @@
 	</style>
 </head>
 <body>
-	
-	<main>		
-
+	<main>
 		<section class="dashboard-frame" aria-label="Fantasy football statistics dashboard">
-			
 			<div class="dashboard-area">
-				<iframe id="dashboard" title="Looker Studio fantasy football dashboard" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox" hidden></iframe>
-				<div class="empty-state" id="empty-state">
-					<div class="empty-content">
-						<div class="empty-number" aria-hidden="true">01</div>
-						<h2>Bring in the league numbers.</h2>
-						<p>Paste a Looker Studio report link to load your dashboard here.</p>
-						<form class="setup-form" id="setup-form">
-							<input id="dashboard-url" type="url" inputmode="url" placeholder="https://lookerstudio.google.com/..." aria-label="Looker Studio report URL" required>
-							<button type="submit">Load dashboard</button>
-						</form>
-						<p class="status-message" id="status-message" role="status" aria-live="polite"></p>
-					</div>
-				</div>
+				<iframe title="Jerry Stats" src="https://datastudio.google.com/embed/reporting/d01041f4-12e0-4f56-b712-ae79806b28b4/page/1FBjB" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
 			</div>
 		</section>
-
-		
 	</main>
-
-	<script>
-		const dashboardFrame = document.querySelector("#dashboard");
-		const emptyState = document.querySelector("#empty-state");
-		const dashboardInput = document.querySelector("#dashboard-url");
-		const statusMessage = document.querySelector("#status-message");
-		const changeButton = document.querySelector("#change-link");
-		const refreshButton = document.querySelector("#refresh");
-		const storageKey = "fourth-and-long-dashboard-url-v2";
-		const defaultDashboardUrl = "https://datastudio.google.com/embed/reporting/d01041f4-12e0-4f56-b712-ae79806b28b4/page/1FBjB";
-
-		function normalizeDashboardUrl(value) {
-			const url = new URL(value);
-			const acceptedHosts = ["lookerstudio.google.com", "datastudio.google.com"];
-			if (url.protocol !== "https:" || !acceptedHosts.includes(url.hostname) || !url.pathname.includes("/reporting/")) {
-				throw new Error("Enter a valid Looker Studio report URL.");
-			}
-			if (!url.pathname.includes("/embed/reporting/")) {
-				url.pathname = url.pathname.replace("/reporting/", "/embed/reporting/");
-			}
-			return url.toString();
-		}
-
-		function showDashboard(value) {
-			try {
-				const url = normalizeDashboardUrl(value);
-				dashboardFrame.src = url;
-				dashboardFrame.hidden = false;
-				emptyState.hidden = true;
-				changeButton.hidden = false;
-				refreshButton.hidden = false;
-				statusMessage.textContent = "";
-				localStorage.setItem(storageKey, url);
-			} catch (error) {
-				statusMessage.textContent = error.message;
-			}
-		}
-
-		document.querySelector("#setup-form").addEventListener("submit", (event) => {
-			event.preventDefault();
-			showDashboard(dashboardInput.value.trim());
-		});
-
-		changeButton.addEventListener("click", () => {
-			dashboardFrame.hidden = true;
-			dashboardFrame.removeAttribute("src");
-			emptyState.hidden = false;
-			changeButton.hidden = true;
-			refreshButton.hidden = true;
-			dashboardInput.focus();
-		});
-
-		refreshButton.addEventListener("click", () => {
-			dashboardFrame.src = dashboardFrame.src;
-		});
-
-		const savedDashboardUrl = localStorage.getItem(storageKey);
-		showDashboard(savedDashboardUrl || defaultDashboardUrl);
-	</script>
 </body>
 </html>
