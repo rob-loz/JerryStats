@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#17221d">
 	<meta name="description" content="Fantasy football league dashboard and weekly stats.">
-	<title>Fourth &amp; Long | League Dashboard</title>
+	<title>Jerry Stats</title>
 	<style>
 		:root {
 			color-scheme: light;
@@ -302,31 +302,11 @@
 	</style>
 </head>
 <body>
-	<header class="masthead">
-		<div class="brand"><span class="brand-mark" aria-hidden="true">4L</span> Fourth &amp; Long</div>
-		<div class="season-tag">Fantasy Football · League HQ</div>
-	</header>
-
-	<main>
-		<section class="intro" aria-labelledby="page-title">
-			<div>
-				<p class="eyebrow">The numbers behind the noise</p>
-				<h1 id="page-title">League dashboard</h1>
-			</div>
-			<p class="intro-note">Matchups, manager stats, and the weekly race for bragging rights.</p>
-		</section>
+	
+	<main>		
 
 		<section class="dashboard-frame" aria-label="Fantasy football statistics dashboard">
-			<div class="frame-bar">
-				<div class="frame-title">Season statistics</div>
-				<div class="frame-actions">
-					<button class="text-button" id="change-link" type="button" hidden>Change dashboard</button>
-					<button class="icon-button" id="refresh" type="button" aria-label="Refresh dashboard" title="Refresh dashboard" hidden>
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 11.8-2L20 12M4 12l2.6 5a7 7 0 0 0 11.8-2"/></svg>
-					</button>
-				</div>
-			</div>
-
+			
 			<div class="dashboard-area">
 				<iframe id="dashboard" title="Looker Studio fantasy football dashboard" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox" hidden></iframe>
 				<div class="empty-state" id="empty-state">
@@ -344,10 +324,7 @@
 			</div>
 		</section>
 
-		<div class="footer-line">
-			<span>Fourth &amp; Long · 2026</span>
-			<span>Every point counts</span>
-		</div>
+		
 	</main>
 
 	<script>
