@@ -37,7 +37,12 @@ draw:function(name,fn){document.querySelectorAll('[data-draw="'+name+'"]').forEa
 .dk tbody tr:last-child td { border-bottom: 0; }
 .dk th:first-child, .dk td:first-child, .dk .dk-l { text-align: left; }
 .dk-team { font-weight: var(--cds-font-weight-medium); }
-.dk-me td { background: color-mix(in srgb, var(--color-warn) 12%, transparent); }
+.dk th:first-child, .dk td:first-child { position: sticky; left: 0; z-index: 1; background: var(--color-panel); box-shadow: inset -1px 0 0 var(--color-border-line); }
+@media (max-width: 640px) {
+  .dk th, .dk td { padding: 6px 8px; }
+  .dk th:first-child, .dk td:first-child { white-space: normal; overflow-wrap: anywhere; min-width: 96px; max-width: 120px; line-height: 1.25; }
+  .dk-heat td { min-width: 38px; }
+}
 .dk-cut td { border-bottom: 2px solid var(--color-fg-muted); }
 .dk-bar { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
 .dk-bar i { display: inline-block; height: 8px; border-radius: 4px; width: 64px; background: var(--cds-chart-grid); position: relative; overflow: hidden; }
@@ -123,7 +128,6 @@ draw:function(name,fn){document.querySelectorAll('[data-draw="'+name+'"]').forEa
 
 <script>
 window.dk = {
-  me: 'Tusken Raiders',
   pct(v) { if (v >= 0.9995) return '>99.9%'; if (v > 0 && v < 0.001) return '<0.1%'; return (v * 100).toFixed(1) + '%'; },
   enc(s) { return encodeURIComponent(String(s)); },
   rows() { const d = dash.data('odds'); return d.status === 'ok' ? d.data : null; }
@@ -154,8 +158,7 @@ dash.draw('oddsbody', (tb) => {
   const rows = dk.rows(); if (!rows) return;
   rows.forEach((r, i) => {
     const tr = document.createElement('tr'); tr.dataset.key = dk.enc(r.team);
-    if (r.team === dk.me) tr.className = 'dk-me';
-    if (i === 3) tr.classList.add('dk-cut');
+    if (i === 3) tr.className = 'dk-cut';
     const cell = (txt, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; if (txt != null) td.textContent = txt; tr.appendChild(td); return td; };
     cell(r.team, 'dk-team'); cell(r.owner, 'dk-l'); cell(r.record);
     cell(r.ppg.toFixed(1)); cell(r.pa_per_game.toFixed(1)); cell(String(r.played_sos_rank));
@@ -173,7 +176,6 @@ dash.draw('heatbody', (tb) => {
   const c = dash.colors[0];
   rows.forEach((r) => {
     const tr = document.createElement('tr'); tr.dataset.key = dk.enc(r.team);
-    if (r.team === dk.me) tr.className = 'dk-me';
     const th = document.createElement('td'); th.className = 'dk-team'; th.textContent = r.team; tr.appendChild(th);
     for (let k = 1; k <= 10; k++) {
       const v = r['p' + k]; const td = document.createElement('td');
@@ -192,7 +194,6 @@ dash.draw('fxbody', (tb) => {
   if (fx.status !== 'ok' || !rows) return;
   rows.forEach((r) => {
     const tr = document.createElement('tr');
-    if (r.team === dk.me) tr.className = 'dk-me';
     const th = document.createElement('td'); th.className = 'dk-team'; th.textContent = r.team; tr.appendChild(th);
     for (let w = 10; w <= 15; w++) {
       const g = fx.data.find((f) => +f.week === w && f.team === r.team);
