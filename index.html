@@ -1,327 +1,333 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-AU">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="theme-color" content="#17221d">
-	<meta name="description" content="Fantasy football league dashboard and weekly stats.">
-	<title>Jerry Stats</title>
-	<style>
-		:root {
-			color-scheme: light;
-			--ink: #17221d;
-			--paper: #f2f1e9;
-			--panel: #fffefa;
-			--muted: #69736b;
-			--line: #d9ddd3;
-			--lime: #d2f36b;
-			--orange: #ef7653;
-			--serif: Georgia, "Times New Roman", serif;
-			--sans: "Trebuchet MS", "Segoe UI", sans-serif;
-		}
-
-		* { box-sizing: border-box; }
-
-		body {
-			margin: 0;
-			min-width: 320px;
-			min-height: 100vh;
-			background-color: var(--paper);
-			background-image: radial-gradient(#c7ccbf 0.7px, transparent 0.7px);
-			background-size: 18px 18px;
-			color: var(--ink);
-			font-family: var(--sans);
-		}
-
-		button, input { font: inherit; }
-
-		.masthead {
-			min-height: 78px;
-			padding: 0 clamp(20px, 5vw, 72px);
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			gap: 20px;
-			color: #f5f4ec;
-			background: var(--ink);
-			border-bottom: 4px solid var(--lime);
-		}
-
-		.brand {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			font-size: 13px;
-			font-weight: 800;
-			letter-spacing: 1.2px;
-			text-transform: uppercase;
-		}
-
-		.brand-mark {
-			width: 34px;
-			height: 34px;
-			display: grid;
-			place-items: center;
-			color: var(--ink);
-			background: var(--lime);
-			font-family: var(--serif);
-			font-size: 19px;
-			font-weight: 700;
-			transform: rotate(-5deg);
-		}
-
-		.season-tag {
-			display: inline-flex;
-			align-items: center;
-			gap: 9px;
-			color: #d8ded6;
-			font-size: 11px;
-			font-weight: 700;
-			letter-spacing: 1.1px;
-			text-transform: uppercase;
-		}
-
-		.season-tag::before {
-			width: 7px;
-			height: 7px;
-			border-radius: 50%;
-			background: var(--orange);
-			content: "";
-		}
-
-		main {
-			width: min(1320px, calc(100% - 40px));
-			margin: 0 auto;
-			padding: clamp(30px, 5vw, 58px) 0 54px;
-		}
-
-		.intro {
-			display: flex;
-			align-items: end;
-			justify-content: space-between;
-			gap: 24px;
-			margin-bottom: 28px;
-		}
-
-		.eyebrow {
-			margin: 0 0 9px;
-			color: #617047;
-			font-size: 11px;
-			font-weight: 800;
-			letter-spacing: 1.8px;
-			text-transform: uppercase;
-		}
-
-		h1 {
-			margin: 0;
-			font-family: var(--serif);
-			font-size: clamp(38px, 6vw, 66px);
-			font-weight: 500;
-			line-height: 0.98;
-		}
-
-		.intro-note {
-			max-width: 270px;
-			margin: 0 0 3px;
-			color: var(--muted);
-			font-size: 14px;
-			line-height: 1.5;
-		}
-
-		.dashboard-frame {
-			overflow: hidden;
-			border: 1px solid #cbd0c5;
-			background: var(--panel);
-			box-shadow: 7px 7px 0 #daddd2;
-		}
-
-		.frame-bar {
-			min-height: 54px;
-			padding: 10px 16px 10px 20px;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			gap: 12px;
-			border-bottom: 1px solid var(--line);
-		}
-
-		.frame-title {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			font-size: 12px;
-			font-weight: 800;
-			letter-spacing: 0.7px;
-			text-transform: uppercase;
-		}
-
-		.frame-title::before {
-			width: 10px;
-			height: 10px;
-			background: var(--orange);
-			content: "";
-		}
-
-		.frame-actions { display: flex; align-items: center; gap: 8px; }
-
-		.icon-button, .text-button {
-			min-height: 34px;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			gap: 7px;
-			border: 1px solid var(--line);
-			color: var(--ink);
-			background: transparent;
-			cursor: pointer;
-		}
-
-		.icon-button { width: 36px; padding: 0; }
-		.text-button { padding: 0 12px; font-size: 12px; font-weight: 700; }
-		.icon-button:hover, .text-button:hover { background: #f1f4e9; }
-		.icon-button svg { width: 16px; height: 16px; }
-
-		.dashboard-area {
-			min-height: 590px;
-			position: relative;
-			background: #fff;
-		}
-
-		iframe {
-			width: 100%;
-			height: min(78vh, 900px);
-			min-height: 590px;
-			display: block;
-			border: 0;
-			background: white;
-		}
-
-		.empty-state {
-			min-height: 590px;
-			padding: 40px 22px;
-			display: grid;
-			place-items: center;
-			text-align: center;
-			background: repeating-linear-gradient(135deg, #fffefa, #fffefa 15px, #f8f8f1 15px, #f8f8f1 30px);
-		}
-
-		.empty-content { width: min(100%, 510px); }
-
-		.empty-number {
-			margin-bottom: 10px;
-			color: var(--orange);
-			font-family: var(--serif);
-			font-size: 44px;
-			line-height: 1;
-		}
-
-		h2 {
-			margin: 0 0 10px;
-			font-family: var(--serif);
-			font-size: 29px;
-			font-weight: 500;
-		}
-
-		.empty-content p {
-			margin: 0 auto 22px;
-			color: var(--muted);
-			font-size: 14px;
-			line-height: 1.55;
-		}
-
-		.setup-form {
-			display: flex;
-			gap: 8px;
-			text-align: left;
-		}
-
-		.setup-form input {
-			min-width: 0;
-			min-height: 44px;
-			flex: 1;
-			padding: 0 12px;
-			border: 1px solid #cbd0c5;
-			border-radius: 0;
-			background: #fff;
-		}
-
-		.setup-form input:focus { outline: 2px solid #809b36; outline-offset: 1px; }
-
-		.setup-form button {
-			min-height: 44px;
-			padding: 0 16px;
-			border: 0;
-			color: var(--ink);
-			background: var(--lime);
-			font-size: 12px;
-			font-weight: 800;
-			text-transform: uppercase;
-			cursor: pointer;
-		}
-
-		.setup-form button:hover { background: #c4e552; }
-
-		.status-message {
-			min-height: 20px;
-			margin-top: 9px !important;
-			color: #9b3f2a !important;
-			font-size: 12px !important;
-		}
-
-		.footer-line {
-			margin-top: 24px;
-			display: flex;
-			justify-content: space-between;
-			gap: 16px;
-			color: #677168;
-			font-size: 11px;
-			font-weight: 700;
-			letter-spacing: 0.8px;
-			text-transform: uppercase;
-		}
-
-		[hidden] { display: none !important; }
-
-		html, body, main, .dashboard-frame, .dashboard-area {
-			width: 100%;
-			min-width: 0;
-			min-height: 100%;
-			margin: 0;
-			padding: 0;
-			border: 0;
-			background: #fff;
-			box-shadow: none;
-		}
-
-		html, body { height: 100%; overflow: hidden; }
-		iframe { width: 100%; height: 100vh; min-height: 100vh; }
-
-		@media (max-width: 620px) {
-			.masthead { min-height: 66px; padding: 0 18px; }
-			.brand { font-size: 11px; letter-spacing: 0.8px; }
-			.season-tag { font-size: 9px; letter-spacing: 0.6px; }
-			main { width: 100%; padding: 0; }
-			.intro { align-items: start; flex-direction: column; gap: 13px; margin-bottom: 20px; }
-			.intro-note { max-width: 360px; }
-			.frame-bar { padding: 9px 10px; }
-			.frame-title { font-size: 10px; }
-			.text-button { width: 36px; padding: 0; font-size: 0; }
-			.text-button::before { font-size: 16px; content: "×"; }
-			.dashboard-area, iframe, .empty-state { min-height: 68vh; }
-			iframe { height: 100vh; min-height: 100vh; }
-			.setup-form { flex-direction: column; }
-			.setup-form button { width: 100%; }
-			.footer-line { font-size: 9px; letter-spacing: 0.4px; }
-		}
-	</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dock Round the Clock Playoff Odds</title>
+<style>
+:root{--color-fg:#1c2128;--color-fg-muted:#5b6470;--color-bg:#f7f8fa;--color-panel:#ffffff;--color-border-line:#e1e4e9;--color-ok:#1f8a4c;--color-warn:#c98a00;--color-bad:#c23b3b;--cds-chart-grid:#e6e9ee;--cds-chart-axis:#8a939e;--chart-1:#2f6fd6;
+--font-anthropic-sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--font-anthropic-serif:Georgia,"Times New Roman",serif;
+--cds-font-size-title:28px;--cds-font-size-heading:18px;--cds-font-size-body:14px;--cds-font-size-caption:12px;--cds-font-weight-medium:600;
+--cds-gap-sm:8px;--cds-gap-xl:32px;--cds-radius:8px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--color-fg:#e8eaed;--color-fg-muted:#9aa3ad;--color-bg:#14171b;--color-panel:#1c2025;--color-border-line:#2e343b;--color-ok:#4cc27e;--color-warn:#e0b040;--color-bad:#ef6b6b;--cds-chart-grid:#2e343b;--cds-chart-axis:#6b7480;--chart-1:#6ea2ff;color-scheme:dark}}
+body{margin:0;background:var(--color-bg);color:var(--color-fg);font-family:var(--font-anthropic-sans)}
+.page{max-width:1100px;margin:0 auto;padding-block:32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+window.__DATA={odds:[{"team": "Purf Silly Turtles", "owner": "Kenneth", "record": "10-0", "wins": 10, "losses": 0, "pf": 1458.76, "pa": 1000.0, "ppg": 145.9, "pa_per_game": 100.0, "rating": 130.9, "played_sos_rank": 10, "remaining_sos": 113.9, "remaining_sos_rank": 9, "top4": 1.0, "bottom4": 0.0, "first": 0.9999, "last": 0.0, "exp_wins": 13.42, "top4_change": 0.0, "bottom4_change": 0.0, "p1": 0.9999, "p2": 0.0001, "p3": 0.0, "p4": 0.0, "p5": 0.0, "p6": 0.0, "p7": 0.0, "p8": 0.0, "p9": 0.0, "p10": 0.0}, {"team": "Shacksonville Shaguars", "owner": "Joel", "record": "6-4", "wins": 6, "losses": 4, "pf": 1195.13, "pa": 1142.78, "ppg": 119.5, "pa_per_game": 114.3, "rating": 117.7, "played_sos_rank": 7, "remaining_sos": 112.6, "remaining_sos_rank": 10, "top4": 0.8764, "bottom4": 0.0256, "first": 0.0001, "last": 0.0005, "exp_wins": 8.78, "top4_change": 0.0056, "bottom4_change": -0.0024, "p1": 0.0001, "p2": 0.5755, "p3": 0.1982, "p4": 0.1025, "p5": 0.0627, "p6": 0.0352, "p7": 0.0139, "p8": 0.0079, "p9": 0.0033, "p10": 0.0005}, {"team": "Seconded Slingers", "owner": "Dan", "record": "5-5", "wins": 5, "losses": 5, "pf": 1166.97, "pa": 1266.31, "ppg": 116.7, "pa_per_game": 126.6, "rating": 116.3, "played_sos_rank": 2, "remaining_sos": 116.7, "remaining_sos_rank": 4, "top4": 0.5425, "bottom4": 0.1847, "first": 0.0, "last": 0.0169, "exp_wins": 7.49, "top4_change": -0.1411, "bottom4_change": 0.0795, "p1": 0.0, "p2": 0.13, "p3": 0.2235, "p4": 0.189, "p5": 0.1615, "p6": 0.1113, "p7": 0.0769, "p8": 0.0594, "p9": 0.0315, "p10": 0.0169}, {"team": "deanoss4", "owner": "Dean", "record": "5-5", "wins": 5, "losses": 5, "pf": 1155.59, "pa": 1175.37, "ppg": 115.6, "pa_per_game": 117.5, "rating": 115.7, "played_sos_rank": 4, "remaining_sos": 116.5, "remaining_sos_rank": 5, "top4": 0.5084, "bottom4": 0.1993, "first": 0.0, "last": 0.0213, "exp_wins": 7.46, "top4_change": 0.1978, "bottom4_change": -0.1635, "p1": 0.0, "p2": 0.1065, "p3": 0.2067, "p4": 0.1951, "p5": 0.1748, "p6": 0.1176, "p7": 0.0786, "p8": 0.0648, "p9": 0.0345, "p10": 0.0213}, {"team": "Trey's Team of Tegrity", "owner": "Morbs", "record": "5-5", "wins": 5, "losses": 5, "pf": 1144.11, "pa": 1170.09, "ppg": 114.4, "pa_per_game": 117.0, "rating": 115.1, "played_sos_rank": 5, "remaining_sos": 116.7, "remaining_sos_rank": 3, "top4": 0.467, "bottom4": 0.2176, "first": 0.0, "last": 0.0215, "exp_wins": 7.42, "top4_change": 0.1854, "bottom4_change": -0.1763, "p1": 0.0, "p2": 0.1119, "p3": 0.1716, "p4": 0.1835, "p5": 0.1797, "p6": 0.1358, "p7": 0.0901, "p8": 0.0687, "p9": 0.0373, "p10": 0.0215}, {"team": "Bogan Bucs", "owner": "Adam", "record": "5-5", "wins": 5, "losses": 5, "pf": 1072.84, "pa": 1117.46, "ppg": 107.3, "pa_per_game": 111.7, "rating": 111.6, "played_sos_rank": 8, "remaining_sos": 119.4, "remaining_sos_rank": 1, "top4": 0.2525, "bottom4": 0.4131, "first": 0.0, "last": 0.0469, "exp_wins": 7.07, "top4_change": -0.1919, "bottom4_change": 0.1683, "p1": 0.0, "p2": 0.0411, "p3": 0.0884, "p4": 0.123, "p5": 0.1453, "p6": 0.1891, "p7": 0.1501, "p8": 0.1228, "p9": 0.0933, "p10": 0.0469}, {"team": "Ya Ball Zach Ertz", "owner": "Jarrad", "record": "4-6", "wins": 4, "losses": 6, "pf": 1055.12, "pa": 1145.09, "ppg": 105.5, "pa_per_game": 114.5, "rating": 110.7, "played_sos_rank": 6, "remaining_sos": 117.7, "remaining_sos_rank": 2, "top4": 0.0795, "bottom4": 0.7315, "first": 0.0, "last": 0.1954, "exp_wins": 6.12, "top4_change": 0.0497, "bottom4_change": -0.1279, "p1": 0.0, "p2": 0.0081, "p3": 0.025, "p4": 0.0465, "p5": 0.0711, "p6": 0.1179, "p7": 0.1529, "p8": 0.1846, "p9": 0.1987, "p10": 0.1954}, {"team": "Tusken Raiders", "owner": "Rob", "record": "4-6", "wins": 4, "losses": 6, "pf": 1018.93, "pa": 1050.21, "ppg": 101.9, "pa_per_game": 105.0, "rating": 108.9, "played_sos_rank": 9, "remaining_sos": 115.1, "remaining_sos_rank": 7, "top4": 0.079, "bottom4": 0.7554, "first": 0.0, "last": 0.2221, "exp_wins": 6.15, "top4_change": 0.0485, "bottom4_change": -0.1148, "p1": 0.0, "p2": 0.0086, "p3": 0.0272, "p4": 0.0432, "p5": 0.0583, "p6": 0.1073, "p7": 0.1428, "p8": 0.1709, "p9": 0.2196, "p10": 0.2221}, {"team": "MurderMurderGATTACA", "owner": "Jum", "record": "3-7", "wins": 3, "losses": 7, "pf": 1177.02, "pa": 1276.68, "ppg": 117.7, "pa_per_game": 127.7, "rating": 116.8, "played_sos_rank": 1, "remaining_sos": 115.3, "remaining_sos_rank": 6, "top4": 0.1076, "bottom4": 0.7135, "first": 0.0, "last": 0.211, "exp_wins": 5.58, "top4_change": -0.0706, "bottom4_change": 0.1553, "p1": 0.0, "p2": 0.0118, "p3": 0.0327, "p4": 0.0631, "p5": 0.0768, "p6": 0.102, "p7": 0.1564, "p8": 0.1622, "p9": 0.1839, "p10": 0.211}, {"team": "Fitzycent199", "owner": "Cam", "record": "3-7", "wins": 3, "losses": 7, "pf": 1143.97, "pa": 1244.45, "ppg": 114.4, "pa_per_game": 124.4, "rating": 115.1, "played_sos_rank": 3, "remaining_sos": 115.1, "remaining_sos_rank": 8, "top4": 0.0871, "bottom4": 0.7593, "first": 0.0, "last": 0.2643, "exp_wins": 5.5, "top4_change": -0.0833, "bottom4_change": 0.1818, "p1": 0.0, "p2": 0.0064, "p3": 0.0267, "p4": 0.054, "p5": 0.0698, "p6": 0.0838, "p7": 0.1384, "p8": 0.1587, "p9": 0.1979, "p10": 0.2643}],fixtures:[{"week": 11, "team": "Trey's Team of Tegrity", "opponent": "Shacksonville Shaguars", "win_prob": 0.459}, {"week": 11, "team": "Shacksonville Shaguars", "opponent": "Trey's Team of Tegrity", "win_prob": 0.541}, {"week": 11, "team": "Fitzycent199", "opponent": "MurderMurderGATTACA", "win_prob": 0.474}, {"week": 11, "team": "MurderMurderGATTACA", "opponent": "Fitzycent199", "win_prob": 0.526}, {"week": 11, "team": "Ya Ball Zach Ertz", "opponent": "deanoss4", "win_prob": 0.42}, {"week": 11, "team": "deanoss4", "opponent": "Ya Ball Zach Ertz", "win_prob": 0.58}, {"week": 11, "team": "Purf Silly Turtles", "opponent": "Bogan Bucs", "win_prob": 0.78}, {"week": 11, "team": "Bogan Bucs", "opponent": "Purf Silly Turtles", "win_prob": 0.22}, {"week": 11, "team": "Tusken Raiders", "opponent": "Seconded Slingers", "win_prob": 0.384}, {"week": 11, "team": "Seconded Slingers", "opponent": "Tusken Raiders", "win_prob": 0.616}, {"week": 12, "team": "Shacksonville Shaguars", "opponent": "Tusken Raiders", "win_prob": 0.638}, {"week": 12, "team": "Tusken Raiders", "opponent": "Shacksonville Shaguars", "win_prob": 0.362}, {"week": 12, "team": "Bogan Bucs", "opponent": "Seconded Slingers", "win_prob": 0.425}, {"week": 12, "team": "Seconded Slingers", "opponent": "Bogan Bucs", "win_prob": 0.575}, {"week": 12, "team": "Ya Ball Zach Ertz", "opponent": "Purf Silly Turtles", "win_prob": 0.21}, {"week": 12, "team": "Purf Silly Turtles", "opponent": "Ya Ball Zach Ertz", "win_prob": 0.79}, {"week": 12, "team": "MurderMurderGATTACA", "opponent": "deanoss4", "win_prob": 0.517}, {"week": 12, "team": "deanoss4", "opponent": "MurderMurderGATTACA", "win_prob": 0.483}, {"week": 12, "team": "Trey's Team of Tegrity", "opponent": "Fitzycent199", "win_prob": 0.5}, {"week": 12, "team": "Fitzycent199", "opponent": "Trey's Team of Tegrity", "win_prob": 0.5}, {"week": 13, "team": "Shacksonville Shaguars", "opponent": "Bogan Bucs", "win_prob": 0.597}, {"week": 13, "team": "Bogan Bucs", "opponent": "Shacksonville Shaguars", "win_prob": 0.403}, {"week": 13, "team": "Tusken Raiders", "opponent": "Ya Ball Zach Ertz", "win_prob": 0.471}, {"week": 13, "team": "Ya Ball Zach Ertz", "opponent": "Tusken Raiders", "win_prob": 0.529}, {"week": 13, "team": "MurderMurderGATTACA", "opponent": "Seconded Slingers", "win_prob": 0.508}, {"week": 13, "team": "Seconded Slingers", "opponent": "MurderMurderGATTACA", "win_prob": 0.492}, {"week": 13, "team": "Trey's Team of Tegrity", "opponent": "Purf Silly Turtles", "win_prob": 0.265}, {"week": 13, "team": "Purf Silly Turtles", "opponent": "Trey's Team of Tegrity", "win_prob": 0.735}, {"week": 13, "team": "Fitzycent199", "opponent": "deanoss4", "win_prob": 0.491}, {"week": 13, "team": "deanoss4", "opponent": "Fitzycent199", "win_prob": 0.509}, {"week": 14, "team": "Shacksonville Shaguars", "opponent": "Ya Ball Zach Ertz", "win_prob": 0.61}, {"week": 14, "team": "Ya Ball Zach Ertz", "opponent": "Shacksonville Shaguars", "win_prob": 0.39}, {"week": 14, "team": "MurderMurderGATTACA", "opponent": "Bogan Bucs", "win_prob": 0.583}, {"week": 14, "team": "Bogan Bucs", "opponent": "MurderMurderGATTACA", "win_prob": 0.417}, {"week": 14, "team": "Trey's Team of Tegrity", "opponent": "Tusken Raiders", "win_prob": 0.599}, {"week": 14, "team": "Tusken Raiders", "opponent": "Trey's Team of Tegrity", "win_prob": 0.401}, {"week": 14, "team": "Fitzycent199", "opponent": "Seconded Slingers", "win_prob": 0.482}, {"week": 14, "team": "Seconded Slingers", "opponent": "Fitzycent199", "win_prob": 0.518}, {"week": 14, "team": "Purf Silly Turtles", "opponent": "deanoss4", "win_prob": 0.728}, {"week": 14, "team": "deanoss4", "opponent": "Purf Silly Turtles", "win_prob": 0.272}, {"week": 15, "team": "Trey's Team of Tegrity", "opponent": "Ya Ball Zach Ertz", "win_prob": 0.571}, {"week": 15, "team": "Ya Ball Zach Ertz", "opponent": "Trey's Team of Tegrity", "win_prob": 0.429}, {"week": 15, "team": "Shacksonville Shaguars", "opponent": "MurderMurderGATTACA", "win_prob": 0.514}, {"week": 15, "team": "MurderMurderGATTACA", "opponent": "Shacksonville Shaguars", "win_prob": 0.486}, {"week": 15, "team": "Fitzycent199", "opponent": "Bogan Bucs", "win_prob": 0.557}, {"week": 15, "team": "Bogan Bucs", "opponent": "Fitzycent199", "win_prob": 0.443}, {"week": 15, "team": "Tusken Raiders", "opponent": "deanoss4", "win_prob": 0.392}, {"week": 15, "team": "deanoss4", "opponent": "Tusken Raiders", "win_prob": 0.608}, {"week": 15, "team": "Purf Silly Turtles", "opponent": "Seconded Slingers", "win_prob": 0.72}, {"week": 15, "team": "Seconded Slingers", "opponent": "Purf Silly Turtles", "win_prob": 0.28}],history:[{"week": 1, "team": "Trey's Team of Tegrity", "wins": 0, "losses": 1, "rating": 121.3, "top4": 0.2844, "bottom4": 0.5016, "first": 0.0459, "last": 0.1183}, {"week": 1, "team": "Shacksonville Shaguars", "wins": 0, "losses": 1, "rating": 117.7, "top4": 0.154, "bottom4": 0.6789, "first": 0.0188, "last": 0.2433}, {"week": 1, "team": "Tusken Raiders", "wins": 1, "losses": 0, "rating": 123.3, "top4": 0.557, "bottom4": 0.2406, "first": 0.1559, "last": 0.035}, {"week": 1, "team": "Ya Ball Zach Ertz", "wins": 0, "losses": 1, "rating": 122.4, "top4": 0.343, "bottom4": 0.43, "first": 0.064, "last": 0.0943}, {"week": 1, "team": "Fitzycent199", "wins": 0, "losses": 1, "rating": 118.3, "top4": 0.1761, "bottom4": 0.6443, "first": 0.0214, "last": 0.2145}, {"week": 1, "team": "MurderMurderGATTACA", "wins": 1, "losses": 0, "rating": 122.8, "top4": 0.5398, "bottom4": 0.2503, "first": 0.147, "last": 0.0369}, {"week": 1, "team": "Purf Silly Turtles", "wins": 1, "losses": 0, "rating": 124.2, "top4": 0.5992, "bottom4": 0.206, "first": 0.185, "last": 0.0265}, {"week": 1, "team": "Bogan Bucs", "wins": 1, "losses": 0, "rating": 123.6, "top4": 0.5904, "bottom4": 0.2146, "first": 0.1767, "last": 0.029}, {"week": 1, "team": "deanoss4", "wins": 1, "losses": 0, "rating": 123.0, "top4": 0.5374, "bottom4": 0.252, "first": 0.1541, "last": 0.0361}, {"week": 1, "team": "Seconded Slingers", "wins": 0, "losses": 1, "rating": 119.6, "top4": 0.2187, "bottom4": 0.5817, "first": 0.0311, "last": 0.1662}, {"week": 2, "team": "Trey's Team of Tegrity", "wins": 0, "losses": 2, "rating": 117.2, "top4": 0.2972, "bottom4": 0.454, "first": 0.0384, "last": 0.0802}, {"week": 2, "team": "Shacksonville Shaguars", "wins": 1, "losses": 1, "rating": 111.2, "top4": 0.203, "bottom4": 0.5776, "first": 0.0228, "last": 0.1183}, {"week": 2, "team": "Tusken Raiders", "wins": 1, "losses": 1, "rating": 115.0, "top4": 0.3559, "bottom4": 0.3881, "first": 0.0554, "last": 0.0556}, {"week": 2, "team": "Ya Ball Zach Ertz", "wins": 1, "losses": 1, "rating": 115.7, "top4": 0.4013, "bottom4": 0.3441, "first": 0.066, "last": 0.0439}, {"week": 2, "team": "Fitzycent199", "wins": 0, "losses": 2, "rating": 108.8, "top4": 0.0611, "bottom4": 0.8268, "first": 0.0038, "last": 0.3659}, {"week": 2, "team": "MurderMurderGATTACA", "wins": 2, "losses": 0, "rating": 119.0, "top4": 0.74, "bottom4": 0.1024, "first": 0.2714, "last": 0.007}, {"week": 2, "team": "Purf Silly Turtles", "wins": 2, "losses": 0, "rating": 116.3, "top4": 0.6172, "bottom4": 0.1726, "first": 0.1596, "last": 0.014}, {"week": 2, "team": "Bogan Bucs", "wins": 1, "losses": 1, "rating": 117.2, "top4": 0.4922, "bottom4": 0.2632, "first": 0.098, "last": 0.0319}, {"week": 2, "team": "deanoss4", "wins": 2, "losses": 0, "rating": 119.3, "top4": 0.7454, "bottom4": 0.0973, "first": 0.2783, "last": 0.0066}, {"week": 2, "team": "Seconded Slingers", "wins": 0, "losses": 2, "rating": 110.3, "top4": 0.0868, "bottom4": 0.7739, "first": 0.0064, "last": 0.2767}, {"week": 3, "team": "Trey's Team of Tegrity", "wins": 1, "losses": 2, "rating": 115.8, "top4": 0.2616, "bottom4": 0.4639, "first": 0.0204, "last": 0.065}, {"week": 3, "team": "Shacksonville Shaguars", "wins": 1, "losses": 2, "rating": 111.6, "top4": 0.122, "bottom4": 0.6782, "first": 0.0067, "last": 0.1525}, {"week": 3, "team": "Tusken Raiders", "wins": 2, "losses": 1, "rating": 115.5, "top4": 0.4299, "bottom4": 0.2919, "first": 0.0499, "last": 0.0257}, {"week": 3, "team": "Ya Ball Zach Ertz", "wins": 1, "losses": 2, "rating": 113.8, "top4": 0.2004, "bottom4": 0.547, "first": 0.0126, "last": 0.09}, {"week": 3, "team": "Fitzycent199", "wins": 0, "losses": 3, "rating": 108.1, "top4": 0.0251, "bottom4": 0.9068, "first": 0.0007, "last": 0.5136}, {"week": 3, "team": "MurderMurderGATTACA", "wins": 3, "losses": 0, "rating": 122.3, "top4": 0.884, "bottom4": 0.0325, "first": 0.3976, "last": 0.0012}, {"week": 3, "team": "Purf Silly Turtles", "wins": 3, "losses": 0, "rating": 121.0, "top4": 0.8385, "bottom4": 0.0492, "first": 0.3129, "last": 0.0015}, {"week": 3, "team": "Bogan Bucs", "wins": 1, "losses": 2, "rating": 118.0, "top4": 0.3738, "bottom4": 0.3382, "first": 0.0401, "last": 0.0411}, {"week": 3, "team": "deanoss4", "wins": 2, "losses": 1, "rating": 120.3, "top4": 0.682, "bottom4": 0.1234, "first": 0.1456, "last": 0.0085}, {"week": 3, "team": "Seconded Slingers", "wins": 1, "losses": 2, "rating": 113.8, "top4": 0.1828, "bottom4": 0.5688, "first": 0.0136, "last": 0.1009}, {"week": 4, "team": "Trey's Team of Tegrity", "wins": 1, "losses": 3, "rating": 116.5, "top4": 0.2046, "bottom4": 0.5773, "first": 0.0116, "last": 0.1497}, {"week": 4, "team": "Shacksonville Shaguars", "wins": 2, "losses": 2, "rating": 113.3, "top4": 0.2296, "bottom4": 0.5428, "first": 0.0171, "last": 0.1272}, {"week": 4, "team": "Tusken Raiders", "wins": 2, "losses": 2, "rating": 115.6, "top4": 0.3229, "bottom4": 0.4334, "first": 0.0274, "last": 0.0799}, {"week": 4, "team": "Ya Ball Zach Ertz", "wins": 2, "losses": 2, "rating": 115.3, "top4": 0.3213, "bottom4": 0.4293, "first": 0.0267, "last": 0.083}, {"week": 4, "team": "Fitzycent199", "wins": 1, "losses": 3, "rating": 112.0, "top4": 0.0834, "bottom4": 0.7829, "first": 0.003, "last": 0.344}, {"week": 4, "team": "MurderMurderGATTACA", "wins": 3, "losses": 1, "rating": 120.8, "top4": 0.7666, "bottom4": 0.0913, "first": 0.2001, "last": 0.0072}, {"week": 4, "team": "Purf Silly Turtles", "wins": 4, "losses": 0, "rating": 123.6, "top4": 0.9355, "bottom4": 0.0176, "first": 0.5854, "last": 0.0008}, {"week": 4, "team": "Bogan Bucs", "wins": 1, "losses": 3, "rating": 118.9, "top4": 0.2944, "bottom4": 0.4579, "first": 0.0235, "last": 0.0987}, {"week": 4, "team": "deanoss4", "wins": 2, "losses": 2, "rating": 119.4, "top4": 0.4981, "bottom4": 0.2633, "first": 0.0701, "last": 0.0352}, {"week": 4, "team": "Seconded Slingers", "wins": 2, "losses": 2, "rating": 116.1, "top4": 0.3435, "bottom4": 0.4042, "first": 0.0351, "last": 0.0743}, {"week": 5, "team": "Trey's Team of Tegrity", "wins": 2, "losses": 3, "rating": 116.4, "top4": 0.2153, "bottom4": 0.5475, "first": 0.0103, "last": 0.1302}, {"week": 5, "team": "Shacksonville Shaguars", "wins": 2, "losses": 3, "rating": 114.2, "top4": 0.1382, "bottom4": 0.6705, "first": 0.0057, "last": 0.2068}, {"week": 5, "team": "Tusken Raiders", "wins": 2, "losses": 3, "rating": 115.3, "top4": 0.1777, "bottom4": 0.6053, "first": 0.0085, "last": 0.1593}, {"week": 5, "team": "Ya Ball Zach Ertz", "wins": 3, "losses": 2, "rating": 116.5, "top4": 0.4027, "bottom4": 0.3353, "first": 0.034, "last": 0.0505}, {"week": 5, "team": "Fitzycent199", "wins": 1, "losses": 4, "rating": 116.8, "top4": 0.0965, "bottom4": 0.7412, "first": 0.0028, "last": 0.2737}, {"week": 5, "team": "MurderMurderGATTACA", "wins": 3, "losses": 2, "rating": 122.2, "top4": 0.6869, "bottom4": 0.1288, "first": 0.1166, "last": 0.0105}, {"week": 5, "team": "Purf Silly Turtles", "wins": 5, "losses": 0, "rating": 124.7, "top4": 0.9618, "bottom4": 0.0079, "first": 0.6665, "last": 0.0004}, {"week": 5, "team": "Bogan Bucs", "wins": 2, "losses": 3, "rating": 121.4, "top4": 0.426, "bottom4": 0.3108, "first": 0.0354, "last": 0.0477}, {"week": 5, "team": "deanoss4", "wins": 2, "losses": 3, "rating": 117.3, "top4": 0.2482, "bottom4": 0.5024, "first": 0.0131, "last": 0.1073}, {"week": 5, "team": "Seconded Slingers", "wins": 3, "losses": 2, "rating": 121.8, "top4": 0.6466, "bottom4": 0.1502, "first": 0.1071, "last": 0.0137}, {"week": 6, "team": "Trey's Team of Tegrity", "wins": 3, "losses": 3, "rating": 112.8, "top4": 0.3266, "bottom4": 0.4345, "first": 0.0072, "last": 0.0908}, {"week": 6, "team": "Shacksonville Shaguars", "wins": 3, "losses": 3, "rating": 111.3, "top4": 0.2644, "bottom4": 0.5124, "first": 0.005, "last": 0.1248}, {"week": 6, "team": "Tusken Raiders", "wins": 2, "losses": 4, "rating": 111.3, "top4": 0.1197, "bottom4": 0.7189, "first": 0.001, "last": 0.279}, {"week": 6, "team": "Ya Ball Zach Ertz", "wins": 3, "losses": 3, "rating": 112.8, "top4": 0.3204, "bottom4": 0.4372, "first": 0.0072, "last": 0.0909}, {"week": 6, "team": "Fitzycent199", "wins": 2, "losses": 4, "rating": 113.8, "top4": 0.1875, "bottom4": 0.6052, "first": 0.002, "last": 0.1789}, {"week": 6, "team": "MurderMurderGATTACA", "wins": 3, "losses": 3, "rating": 117.3, "top4": 0.5435, "bottom4": 0.2346, "first": 0.0184, "last": 0.0321}, {"week": 6, "team": "Purf Silly Turtles", "wins": 6, "losses": 0, "rating": 126.5, "top4": 0.9972, "bottom4": 0.0003, "first": 0.9269, "last": 0.0}, {"week": 6, "team": "Bogan Bucs", "wins": 2, "losses": 4, "rating": 116.6, "top4": 0.2875, "bottom4": 0.4753, "first": 0.0038, "last": 0.1095}, {"week": 6, "team": "deanoss4", "wins": 3, "losses": 3, "rating": 114.6, "top4": 0.4063, "bottom4": 0.3495, "first": 0.0099, "last": 0.0611}, {"week": 6, "team": "Seconded Slingers", "wins": 3, "losses": 3, "rating": 117.3, "top4": 0.5468, "bottom4": 0.2321, "first": 0.0185, "last": 0.0328}, {"week": 7, "team": "Trey's Team of Tegrity", "wins": 4, "losses": 3, "rating": 112.5, "top4": 0.4731, "bottom4": 0.3005, "first": 0.0072, "last": 0.0444}, {"week": 7, "team": "Shacksonville Shaguars", "wins": 4, "losses": 3, "rating": 111.4, "top4": 0.4158, "bottom4": 0.3519, "first": 0.0059, "last": 0.0575}, {"week": 7, "team": "Tusken Raiders", "wins": 2, "losses": 5, "rating": 110.3, "top4": 0.0785, "bottom4": 0.8006, "first": 0.0001, "last": 0.3937}, {"week": 7, "team": "Ya Ball Zach Ertz", "wins": 3, "losses": 4, "rating": 112.6, "top4": 0.2505, "bottom4": 0.5266, "first": 0.0013, "last": 0.1237}, {"week": 7, "team": "Fitzycent199", "wins": 3, "losses": 4, "rating": 114.9, "top4": 0.3454, "bottom4": 0.4113, "first": 0.0024, "last": 0.0764}, {"week": 7, "team": "MurderMurderGATTACA", "wins": 3, "losses": 4, "rating": 116.5, "top4": 0.4264, "bottom4": 0.3337, "first": 0.003, "last": 0.0553}, {"week": 7, "team": "Purf Silly Turtles", "wins": 7, "losses": 0, "rating": 127.0, "top4": 0.9994, "bottom4": 0.0001, "first": 0.9728, "last": 0.0}, {"week": 7, "team": "Bogan Bucs", "wins": 3, "losses": 4, "rating": 115.1, "top4": 0.3606, "bottom4": 0.396, "first": 0.0029, "last": 0.0705}, {"week": 7, "team": "deanoss4", "wins": 3, "losses": 4, "rating": 113.1, "top4": 0.2746, "bottom4": 0.499, "first": 0.0019, "last": 0.1117}, {"week": 7, "team": "Seconded Slingers", "wins": 3, "losses": 4, "rating": 115.5, "top4": 0.3756, "bottom4": 0.3804, "first": 0.0024, "last": 0.0668}, {"week": 8, "team": "Trey's Team of Tegrity", "wins": 4, "losses": 4, "rating": 112.9, "top4": 0.3526, "bottom4": 0.3719, "first": 0.0008, "last": 0.0367}, {"week": 8, "team": "Shacksonville Shaguars", "wins": 5, "losses": 3, "rating": 115.0, "top4": 0.7106, "bottom4": 0.1113, "first": 0.0081, "last": 0.0039}, {"week": 8, "team": "Tusken Raiders", "wins": 2, "losses": 6, "rating": 107.7, "top4": 0.0172, "bottom4": 0.9296, "first": 0.0, "last": 0.5923}, {"week": 8, "team": "Ya Ball Zach Ertz", "wins": 3, "losses": 5, "rating": 111.2, "top4": 0.1131, "bottom4": 0.7081, "first": 0.0001, "last": 0.1564}, {"week": 8, "team": "Fitzycent199", "wins": 3, "losses": 5, "rating": 114.9, "top4": 0.2294, "bottom4": 0.5227, "first": 0.0001, "last": 0.0809}, {"week": 8, "team": "MurderMurderGATTACA", "wins": 3, "losses": 5, "rating": 116.8, "top4": 0.3428, "bottom4": 0.3939, "first": 0.0001, "last": 0.0504}, {"week": 8, "team": "Purf Silly Turtles", "wins": 8, "losses": 0, "rating": 128.9, "top4": 1.0, "bottom4": 0.0, "first": 0.9879, "last": 0.0}, {"week": 8, "team": "Bogan Bucs", "wins": 4, "losses": 4, "rating": 113.7, "top4": 0.3701, "bottom4": 0.3605, "first": 0.0008, "last": 0.0289}, {"week": 8, "team": "deanoss4", "wins": 4, "losses": 4, "rating": 114.0, "top4": 0.4031, "bottom4": 0.3244, "first": 0.0009, "last": 0.0287}, {"week": 8, "team": "Seconded Slingers", "wins": 4, "losses": 4, "rating": 115.1, "top4": 0.4611, "bottom4": 0.2775, "first": 0.0012, "last": 0.0219}, {"week": 9, "team": "Trey's Team of Tegrity", "wins": 4, "losses": 5, "rating": 113.8, "top4": 0.2816, "bottom4": 0.3939, "first": 0.0001, "last": 0.0422}, {"week": 9, "team": "Shacksonville Shaguars", "wins": 6, "losses": 3, "rating": 116.1, "top4": 0.8709, "bottom4": 0.028, "first": 0.0074, "last": 0.0002}, {"week": 9, "team": "Tusken Raiders", "wins": 3, "losses": 6, "rating": 107.4, "top4": 0.0305, "bottom4": 0.8702, "first": 0.0, "last": 0.3812}, {"week": 9, "team": "Ya Ball Zach Ertz", "wins": 3, "losses": 6, "rating": 109.0, "top4": 0.0298, "bottom4": 0.8594, "first": 0.0, "last": 0.3291}, {"week": 9, "team": "Fitzycent199", "wins": 3, "losses": 6, "rating": 115.2, "top4": 0.1704, "bottom4": 0.5775, "first": 0.0, "last": 0.1006}, {"week": 9, "team": "MurderMurderGATTACA", "wins": 3, "losses": 6, "rating": 115.8, "top4": 0.1782, "bottom4": 0.5582, "first": 0.0, "last": 0.0936}, {"week": 9, "team": "Purf Silly Turtles", "wins": 9, "losses": 0, "rating": 128.9, "top4": 1.0, "bottom4": 0.0, "first": 0.9912, "last": 0.0}, {"week": 9, "team": "Bogan Bucs", "wins": 5, "losses": 4, "rating": 112.8, "top4": 0.4443, "bottom4": 0.2448, "first": 0.0005, "last": 0.01}, {"week": 9, "team": "deanoss4", "wins": 4, "losses": 5, "rating": 114.7, "top4": 0.3106, "bottom4": 0.3627, "first": 0.0, "last": 0.0395}, {"week": 9, "team": "Seconded Slingers", "wins": 5, "losses": 4, "rating": 116.7, "top4": 0.6836, "bottom4": 0.1052, "first": 0.0008, "last": 0.0034}, {"week": 10, "team": "Trey's Team of Tegrity", "wins": 5, "losses": 5, "rating": 115.1, "top4": 0.467, "bottom4": 0.2176, "first": 0.0, "last": 0.0215}, {"week": 10, "team": "Shacksonville Shaguars", "wins": 6, "losses": 4, "rating": 117.7, "top4": 0.8764, "bottom4": 0.0256, "first": 0.0001, "last": 0.0005}, {"week": 10, "team": "Tusken Raiders", "wins": 4, "losses": 6, "rating": 108.9, "top4": 0.079, "bottom4": 0.7554, "first": 0.0, "last": 0.2221}, {"week": 10, "team": "Ya Ball Zach Ertz", "wins": 4, "losses": 6, "rating": 110.7, "top4": 0.0795, "bottom4": 0.7315, "first": 0.0, "last": 0.1954}, {"week": 10, "team": "Fitzycent199", "wins": 3, "losses": 7, "rating": 115.1, "top4": 0.0871, "bottom4": 0.7593, "first": 0.0, "last": 0.2643}, {"week": 10, "team": "MurderMurderGATTACA", "wins": 3, "losses": 7, "rating": 116.8, "top4": 0.1076, "bottom4": 0.7135, "first": 0.0, "last": 0.211}, {"week": 10, "team": "Purf Silly Turtles", "wins": 10, "losses": 0, "rating": 130.9, "top4": 1.0, "bottom4": 0.0, "first": 0.9999, "last": 0.0}, {"week": 10, "team": "Bogan Bucs", "wins": 5, "losses": 5, "rating": 111.6, "top4": 0.2525, "bottom4": 0.4131, "first": 0.0, "last": 0.0469}, {"week": 10, "team": "deanoss4", "wins": 5, "losses": 5, "rating": 115.7, "top4": 0.5084, "bottom4": 0.1993, "first": 0.0, "last": 0.0213}, {"week": 10, "team": "Seconded Slingers", "wins": 5, "losses": 5, "rating": 116.3, "top4": 0.5425, "bottom4": 0.1847, "first": 0.0, "last": 0.0169}]};
+window.dash={colors:['var(--chart-1)'],
+data:function(id){return {status:'ok',data:window.__DATA[id]||[]};},
+_fns:{},
+draw:function(name,fn){if(fn)this._fns[name]=fn;fn=this._fns[name];if(!fn)return;document.querySelectorAll('[data-draw="'+name+'"]').forEach(function(el){fn(el);});}};
+(function(){var w=window.innerWidth,tm;window.addEventListener('resize',function(){clearTimeout(tm);tm=setTimeout(function(){if(window.innerWidth===w)return;w=window.innerWidth;dash.draw('trends');},150);});})();
+</script>
 </head>
 <body>
-	<main>
-		<section class="dashboard-frame" aria-label="Fantasy football statistics dashboard">
-			<div class="dashboard-area">
-				<iframe title="Jerry Stats" src="https://datastudio.google.com/embed/reporting/d01041f4-12e0-4f56-b712-ae79806b28b4/page/1FBjB" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
-			</div>
-		</section>
-	</main>
+<div class="page">
+<style>
+.dk { display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.dk h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.dk h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; text-wrap: balance; }
+.dk-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; }
+.dk-lede { font-size: var(--cds-font-size-body); line-height: 1.55; margin: 0; max-width: 68ch; }
+.dk-sec { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+.dk-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; max-width: 72ch; line-height: 1.5; }
+.dk-wrap { overflow-x: auto; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); }
+.dk table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: var(--cds-font-size-body); }
+.dk th, .dk td { padding: 8px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--color-border-line); }
+.dk th { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); text-transform: uppercase; letter-spacing: .04em; vertical-align: bottom; }
+.dk tbody tr:last-child td { border-bottom: 0; }
+.dk th:first-child, .dk td:first-child, .dk .dk-l { text-align: left; }
+.dk-team { font-weight: var(--cds-font-weight-medium); }
+.dk th:first-child, .dk td:first-child { position: sticky; left: 0; z-index: 1; background: var(--color-panel); box-shadow: inset -1px 0 0 var(--color-border-line); }
+@media (max-width: 640px) {
+  .dk th, .dk td { padding: 6px 8px; }
+  .dk th:first-child, .dk td:first-child { white-space: normal; overflow-wrap: anywhere; min-width: 96px; max-width: 120px; line-height: 1.25; }
+  .dk-heat td { min-width: 38px; }
+}
+.dk-cut td { border-bottom: 2px solid var(--color-fg-muted); }
+.dk-bar { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.dk-bar i { display: inline-block; height: 8px; border-radius: 4px; width: 64px; background: var(--cds-chart-grid); position: relative; overflow: hidden; }
+.dk-bar i b { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+.dk-heat td { text-align: center; min-width: 44px; }
+.dk-fx td { text-align: left; font-size: var(--cds-font-size-caption); }
+.dk-fx .dk-opp { display: block; color: var(--color-fg); }
+.dk-fx .dk-p { display: block; font-weight: var(--cds-font-weight-medium); }
+.dk-good { color: var(--color-ok); } .dk-bad { color: var(--color-bad); }
+.dk details { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.55; max-width: 72ch; }
+.dk details summary { cursor: pointer; color: var(--color-fg); font-size: var(--cds-font-size-body); }
+.dk details li { margin-bottom: 4px; }
+.dk-chg { font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); }
+.dk-tabs { display: inline-flex; gap: 4px; padding: 3px; border: 1px solid var(--color-border-line); border-radius: 999px; background: var(--color-panel); align-self: flex-start; }
+.dk-tabs button { font: inherit; font-size: var(--cds-font-size-caption); border: 0; background: transparent; color: var(--color-fg-muted); padding: 5px 12px; border-radius: 999px; cursor: pointer; }
+.dk-tabs button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); }
+.dk-tabs button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.dk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--cds-gap-sm); }
+.dk-card { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); padding: 10px 12px 6px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dk-card-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.dk-card-h b { font-weight: var(--cds-font-weight-medium); min-width: 0; overflow-wrap: anywhere; }
+.dk-card-v { font-variant-numeric: tabular-nums; font-weight: var(--cds-font-weight-medium); white-space: nowrap; }
+.dk-card-tip { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; min-height: 1.5em; }
+.dk-card svg { display: block; width: 100%; height: 96px; touch-action: pan-y; }
+.dk-card svg text { fill: var(--cds-text-secondary, var(--color-fg-muted)); font-size: 10px; font-family: var(--font-anthropic-sans); }
+.dk-legend { display: flex; gap: 16px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.dk-legend span::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; background: var(--sw); }
+.dk-heat th:not(:first-child), .dk-fx th:not(:first-child) { text-align: center; }
+.dk td.dk-ppg { color: #fff; font-weight: var(--cds-font-weight-medium); }
+[data-dash-source-state=refreshing] { opacity: .5; }
+</style>
+
+<div class="dk">
+  <header class="dk-sec" id="top">
+    <h1>Dock Round the Clock: playoff odds</h1>
+    <p class="dk-sub">After week 10 of 15 (week 10 is provisional until Sleeper finalises it) · top 4 make the playoffs from week 16 · 50,000 simulated seasons</p>
+    <p class="dk-lede" data-read lang="en-AU">Most likely top four: <b data-draw="top4list">—</b>. Most likely bottom four: <b data-draw="bot4list">—</b>. Biggest mover this week: <b data-draw="mover">—</b>.</p>
+  </header>
+
+  <section class="dk-sec" id="odds">
+    <h2>Playoff odds and strength of schedule</h2>
+    <p class="dk-note">Ordered by current standing (wins, then points for). The line under 4th marks the playoff cut. <b>Pts / gm</b> is shaded from dark green (highest scoring) to dark red (lowest). <b>Played SoS</b> is points scored against you per game: rank 1 means you've faced the toughest scoring. <b>Remaining SoS</b> is the average strength rating of your week 11–15 opponents: rank 1 is the hardest run home.</p>
+    <div class="dk-wrap">
+      <table data-source="odds" data-row-key="team" aria-label="Playoff odds by team">
+        <thead><tr>
+          <th data-field="team">Team</th>
+          <th data-field="owner" class="dk-l">Owner</th>
+          <th data-field="record">W-L</th>
+          <th data-field="ppg">Pts / gm</th>
+          <th data-field="pa_per_game">Against / gm</th>
+          <th data-field="played_sos_rank">Played SoS rank</th>
+          <th data-field="remaining_sos">Remaining SoS</th>
+          <th data-field="remaining_sos_rank">Rem. SoS rank</th>
+          <th data-field="top4">Top 4</th>
+          <th data-field="top4_change">Top 4 vs last wk</th>
+          <th data-field="bottom4">Bottom 4</th>
+          <th data-field="exp_wins">Proj. wins</th>
+        </tr></thead>
+        <tbody data-draw="oddsbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="dk-sec" id="trends">
+    <h2>How the odds have moved</h2>
+    <p class="dk-note">Each team's chances as they stood after every week, worked out using only the results known at the time. Point at or tap a chart to see a week.</p>
+    <div class="dk-tabs" role="group" aria-label="Lines to show">
+      <button type="button" id="dk-show-both" data-show="both" aria-pressed="true">Both</button>
+      <button type="button" id="dk-show-top" data-show="top4" aria-pressed="false">Top 4</button>
+      <button type="button" id="dk-show-bot" data-show="bottom4" aria-pressed="false">Bottom 4</button>
+    </div>
+    <div class="dk-legend"><span style="--sw: var(--color-ok)">Top 4 chance</span><span style="--sw: var(--color-bad)">Bottom 4 chance</span></div>
+    <div class="dk-grid" data-draw="trends" data-source="history"></div>
+  </section>
+
+  <section class="dk-sec" id="finish">
+    <h2>Chance of each finishing position</h2>
+    <p class="dk-note">Each row adds up to 100%. Darker cells are more likely. Ties on wins are broken by points for, as Sleeper does.</p>
+    <div class="dk-wrap">
+      <table class="dk-heat" data-source="odds" data-row-key="team" aria-label="Finishing position probabilities">
+        <thead><tr>
+          <th data-field="team">Team</th>
+          <th data-field="p1">1st</th><th data-field="p2">2nd</th><th data-field="p3">3rd</th><th data-field="p4">4th</th><th data-field="p5">5th</th>
+          <th data-field="p6">6th</th><th data-field="p7">7th</th><th data-field="p8">8th</th><th data-field="p9">9th</th><th data-field="p10">10th</th>
+        </tr></thead>
+        <tbody data-draw="heatbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="dk-sec" id="fixtures">
+    <h2>Remaining fixtures and win chances</h2>
+    <p class="dk-note">Each cell shows the opponent and that team's chance of winning.</p>
+    <div class="dk-wrap">
+      <table class="dk-fx" data-source="fixtures" aria-label="Remaining fixtures with win probabilities">
+        <thead><tr><th>Team</th><th>Week 11</th><th>Week 12</th><th>Week 13</th><th>Week 14</th><th>Week 15</th></tr></thead>
+        <tbody data-draw="fxbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <details id="method">
+    <summary>How the odds are worked out</summary>
+    <ul>
+      <li>Every score, result and fixture comes from the Sleeper matchups endpoint for weeks 1–15. Weeks 1–9 match Sleeper's season totals and records exactly. Week 10 is taken from the scoreboard before Sleeper finalised the round.</li>
+      <li>Each team gets a strength rating from its points per game, pulled toward the league average. After n games a team's own average counts for n/(n+10) of the rating, so early weeks lean on the league average and later weeks on the team. The 10 comes from this season's data: weekly scores swing by about 25 points, much more than the real gaps between teams.</li>
+      <li>Every remaining week, each team's score is drawn from a normal distribution around its rating with a spread of 25 points. The season is replayed 50,000 times.</li>
+      <li>The trend charts repeat this after every week from 1 to 10, using only the results known at that point.</li>
+      <li>Top 4 and bottom 4 are the share of those seasons a team finished 1st–4th or 7th–10th. The odds don't account for injuries, byes, trades or waiver moves.</li>
+      <li>This is a snapshot, not live: it won't change until it's re-run with new Sleeper data.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+window.dk = {
+  pct(v) { if (v >= 0.9995) return '>99.9%'; if (v > 0 && v < 0.001) return '<0.1%'; return (v * 100).toFixed(1) + '%'; },
+  enc(s) { return encodeURIComponent(String(s)); },
+  pp(v) { const n = v * 100; if (Math.abs(n) < 0.5) return '0 pts'; return (n > 0 ? '+' : '−') + Math.abs(n).toFixed(1) + ' pts'; },
+  show: 'both',
+  rows() { const d = dash.data('odds'); return d.status === 'ok' ? d.data : null; }
+};
+</script>
+
+<script>
+function names(list) { return list.map((r) => r.team).join(', '); }
+dash.draw('top4list', (el) => {
+  const rows = dk.rows(); if (!rows) { el.textContent = '—'; return; }
+  el.textContent = names([...rows].sort((a, b) => b.top4 - a.top4).slice(0, 4));
+});
+dash.draw('bot4list', (el) => {
+  const rows = dk.rows(); if (!rows) { el.textContent = '—'; return; }
+  el.textContent = names([...rows].sort((a, b) => b.bottom4 - a.bottom4).slice(0, 4));
+});
+
+function bar(td, v, color) {
+  const wrap = document.createElement('span'); wrap.className = 'dk-bar';
+  const t = document.createElement('span'); t.textContent = dk.pct(v);
+  const track = document.createElement('i'); const fill = document.createElement('b');
+  fill.style.width = (v * 100).toFixed(1) + '%'; fill.style.background = color;
+  track.appendChild(fill); wrap.append(t, track); td.appendChild(wrap);
+}
+
+dash.draw('oddsbody', (tb) => {
+  tb.replaceChildren();
+  const rows = dk.rows(); if (!rows) return;
+  const ppgRank = [...rows].map((r) => r.ppg).sort((a, b) => a - b);
+  const grad = d3.scaleLinear().domain([0, 0.5, 1]).range(['#8f1d1d', '#80651a', '#17672f']).interpolate(d3.interpolateLab);
+  const ppgColor = (v) => grad(ppgRank.indexOf(v) / Math.max(1, ppgRank.length - 1));
+  rows.forEach((r, i) => {
+    const tr = document.createElement('tr'); tr.dataset.key = dk.enc(r.team);
+    if (i === 3) tr.className = 'dk-cut';
+    const cell = (txt, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; if (txt != null) td.textContent = txt; tr.appendChild(td); return td; };
+    cell(r.team, 'dk-team'); cell(r.owner, 'dk-l'); cell(r.record);
+    const pc = cell(r.ppg.toFixed(1), 'dk-ppg'); pc.style.background = ppgColor(r.ppg);
+    cell(r.pa_per_game.toFixed(1)); cell(String(r.played_sos_rank));
+    cell(r.remaining_sos.toFixed(1)); cell(String(r.remaining_sos_rank));
+    bar(cell(null), r.top4, 'var(--color-ok)');
+    const ch = cell(dk.pp(r.top4_change)); ch.classList.add('dk-chg');
+    if (Math.abs(r.top4_change) >= 0.005) ch.classList.add(r.top4_change > 0 ? 'dk-good' : 'dk-bad');
+    bar(cell(null), r.bottom4, 'var(--color-bad)');
+    cell(r.exp_wins.toFixed(1));
+    tb.appendChild(tr);
+  });
+});
+
+dash.draw('heatbody', (tb) => {
+  tb.replaceChildren();
+  const rows = dk.rows(); if (!rows) return;
+  const c = dash.colors[0];
+  rows.forEach((r) => {
+    const tr = document.createElement('tr'); tr.dataset.key = dk.enc(r.team);
+    const th = document.createElement('td'); th.className = 'dk-team'; th.textContent = r.team; tr.appendChild(th);
+    for (let k = 1; k <= 10; k++) {
+      const v = r['p' + k]; const td = document.createElement('td');
+      td.textContent = v < 0.0005 ? '·' : Math.round(v * 100) + '%';
+      td.style.background = `color-mix(in srgb, ${c} ${Math.round(Math.min(1, v * 1.6) * 85)}%, transparent)`;
+      if (v > 0.45) td.style.color = 'var(--color-bg)';
+      tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  });
+});
+
+dash.draw('mover', (el) => {
+  const rows = dk.rows(); if (!rows) { el.textContent = '—'; return; }
+  const m = [...rows].sort((a, b) => Math.abs(b.top4_change) - Math.abs(a.top4_change))[0];
+  el.textContent = m.team + ' (' + dk.pp(m.top4_change) + ' in top 4 chance)';
+});
+
+document.querySelectorAll('.dk-tabs button').forEach((b) => {
+  b.addEventListener('click', () => {
+    dk.show = b.dataset.show;
+    document.querySelectorAll('.dk-tabs button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    dash.draw('trends');
+  });
+});
+
+dash.draw('trends', (grid) => {
+  const h = dash.data('history'); const rows = dk.rows();
+  if (h.status !== 'ok' || !rows) { grid.replaceChildren(); return; }
+  const data = h.data.map((d) => ({ ...d, week: +d.week, top4: +d.top4, bottom4: +d.bottom4 }));
+  const weeks = d3.extent(data, (d) => d.week);
+  grid.replaceChildren();
+  const series = dk.show === 'both' ? ['top4', 'bottom4'] : [dk.show];
+  const col = { top4: 'var(--color-ok)', bottom4: 'var(--color-bad)' };
+  rows.forEach((r) => {
+    const pts = data.filter((d) => d.team === r.team).sort((a, b) => a.week - b.week);
+    const card = document.createElement('div'); card.className = 'dk-card';
+    const head = document.createElement('div'); head.className = 'dk-card-h';
+    const name = document.createElement('b'); name.textContent = r.team;
+    const val = document.createElement('span'); val.className = 'dk-card-v';
+    const key = dk.show === 'bottom4' ? 'bottom4' : 'top4';
+    val.textContent = (key === 'top4' ? 'Top 4 ' : 'Bottom 4 ') + Math.round(r[key] * 100) + '%';
+    val.style.color = col[key];
+    val.setAttribute('data-source', 'odds'); val.setAttribute('data-field', key); val.setAttribute('data-where', 'team=' + dk.enc(r.team));
+    head.append(name, val);
+    const tip = document.createElement('div'); tip.className = 'dk-card-tip';
+    const last = pts[pts.length - 1];
+    const tipText = (d) => 'Wk ' + d.week + ' · ' + d.wins + '-' + d.losses + ' · Top 4 ' + Math.round(d.top4 * 100) + '% · Bottom 4 ' + Math.round(d.bottom4 * 100) + '%';
+    tip.textContent = tipText(last);
+    card.append(head, tip);
+    grid.appendChild(card);
+    const W = Math.max(180, card.clientWidth - 24), H = 96, m = { l: 26, r: 6, t: 6, b: 16 };
+    const x = d3.scaleLinear().domain(weeks).range([m.l, W - m.r]);
+    const y = d3.scaleLinear().domain([0, 1]).range([H - m.b, m.t]);
+    const svg = d3.select(card).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img')
+      .attr('aria-label', r.team + ': top 4 chance by week, now ' + Math.round(r.top4 * 100) + '%, bottom 4 chance now ' + Math.round(r.bottom4 * 100) + '%');
+    const yl = [0, 0.5, 1].map((v) => svg.append('text').attr('y', y(v) + 3).attr('text-anchor', 'end').text(v * 100 + '%'));
+    const lw = Math.ceil(d3.max(yl, (t) => t.node().getComputedTextLength()) || 22);
+    m.l = lw + 6; x.range([m.l, W - m.r]);
+    yl.forEach((t) => t.attr('x', m.l - 4));
+    [0, 0.5, 1].forEach((v) => svg.insert('line', 'text').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', 'var(--cds-chart-grid)'));
+    [weeks[0], weeks[1]].forEach((wk) => svg.append('text').attr('x', x(wk)).attr('y', H - 3).attr('text-anchor', wk === weeks[0] ? 'start' : 'end').text('Wk ' + wk));
+    series.forEach((s) => {
+      svg.append('path').datum(pts).attr('fill', 'none').style('stroke', col[s]).attr('stroke-width', 2).attr('stroke-linejoin', 'round')
+        .attr('d', d3.line().x((d) => x(d.week)).y((d) => y(d[s])));
+      svg.append('circle').attr('cx', x(last.week)).attr('cy', y(last[s])).attr('r', 3).style('fill', col[s]);
+    });
+    const rule = svg.append('line').attr('y1', m.t).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-axis)').attr('opacity', 0);
+    const dots = series.map((s) => svg.append('circle').attr('r', 3.5).style('fill', col[s]).attr('opacity', 0));
+    const move = (ev) => {
+      const [px] = d3.pointer(ev, svg.node());
+      const wk = Math.max(weeks[0], Math.min(weeks[1], Math.round(x.invert(px))));
+      const d = pts.find((p) => p.week === wk); if (!d) return;
+      rule.attr('x1', x(wk)).attr('x2', x(wk)).attr('opacity', 1);
+      series.forEach((s, i) => dots[i].attr('cx', x(wk)).attr('cy', y(d[s])).attr('opacity', 1));
+      tip.textContent = tipText(d);
+    };
+    svg.on('pointermove', move).on('pointerdown', move).on('pointerleave', () => {
+      rule.attr('opacity', 0); dots.forEach((c) => c.attr('opacity', 0)); tip.textContent = tipText(last);
+    });
+  });
+});
+
+dash.draw('fxbody', (tb) => {
+  tb.replaceChildren();
+  const fx = dash.data('fixtures'); const rows = dk.rows();
+  if (fx.status !== 'ok' || !rows) return;
+  rows.forEach((r) => {
+    const tr = document.createElement('tr');
+    const th = document.createElement('td'); th.className = 'dk-team'; th.textContent = r.team; tr.appendChild(th);
+    for (let w = 11; w <= 15; w++) {
+      const g = fx.data.find((f) => +f.week === w && f.team === r.team);
+      const td = document.createElement('td');
+      if (g) {
+        const o = document.createElement('span'); o.className = 'dk-opp'; o.textContent = 'vs ' + g.opponent;
+        const p = document.createElement('span');
+        p.className = 'dk-p ' + (g.win_prob >= 0.6 ? 'dk-good' : g.win_prob <= 0.4 ? 'dk-bad' : '');
+        p.textContent = Math.round(g.win_prob * 100) + '% win';
+        p.setAttribute('data-source', 'fixtures'); p.setAttribute('data-field', 'win_prob');
+        p.setAttribute('data-where', 'week=' + w + '&team=' + dk.enc(r.team));
+        td.append(o, p);
+      }
+      tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  });
+});
+</script>
+
+<p class="dk-note" style="margin-top:24px">Snapshot after week 10, data from the Sleeper API.</p>
+</div>
 </body>
 </html>
